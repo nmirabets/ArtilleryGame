@@ -31,8 +31,8 @@ class Game {
   _drawPlayerProjectile() {
     this.ctx.fillStyle = 'orange';
     this.ctx.fillRect(
-      this.playerCannon.projectileTrajectory[this.playerCannon.CurrentTrajectoryIndex].x ,
-      this.playerCannon.projectileTrajectory[this.playerCannon.CurrentTrajectoryIndex].y ,
+      this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].x ,
+      this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].y ,
       10,
       10
     )
@@ -66,15 +66,6 @@ class Game {
     this.ctx.clearRect(0, 0, 500, 500);
   }
 
-  _update() {
-    this._clean();
-    this._drawPlayerCannon();
-    this._drawTargetCannon();
-    this.playerCannon._moveProjectile();
-    this._drawPlayerProjectile();
-    window.requestAnimationFrame(this._update.bind(this));
-  }
-
   start() {
     this._clean();
     this._assignControlsToKeys();
@@ -82,7 +73,26 @@ class Game {
     this._drawTargetCannon();
   }
 
-  // _update() {
+  shoot() {
+    this.playerCannon._calculateTrajectory();
+    this.playerCannon._shoot()
+    window.requestAnimationFrame(this._update.bind(this));
+  }
+
+  _update() {
+    this._clean();
+    this._drawPlayerCannon();
+    this._drawTargetCannon();
+    //this.playerCannon._moveProjectile();
+    this._drawPlayerProjectile();
+    window.requestAnimationFrame(this._update.bind(this));
+  }
+
+  _generateRandomTargetPosition(targetCannon) {
+    this.targetCannon = new Cannon(Math.floor(Math.random() * 1), Math.floor(Math.random() * 1));
+  }
+
+    // _update() {
   //   this._clean();
   //   this._drawPlayerCannon();
   //   this._drawTargetCannon();
@@ -97,17 +107,5 @@ class Game {
   //     this.playerCannon._endShot()
   //   }
   // }
-
-  shoot() {
-    this.playerCannon.bulletsLeft = this.playerCannon.bulletsLeft --
-    this.playerCannon._calculateTrajectory();
-    this.playerCannon.CurrentTrajectoryIndex = 0;
-    this.playerCannon._shoot()
-    window.requestAnimationFrame(this._update.bind(this));
-  }
-
-  _generateRandomTargetPosition(targetCannon) {
-    this.targetCannon = new Cannon(Math.floor(Math.random() * 1), Math.floor(Math.random() * 1));
-  }
 
 }

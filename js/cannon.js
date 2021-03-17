@@ -4,9 +4,9 @@ class Cannon {
     this.yPosition = yInitialPosition;
     this.angle = 45;
     this.power = 100;
-    this.bulletsLeft = 3;
+    this.shotsLeft = 3;
     this.projectileTrajectory = undefined;
-    this.currentTrajectoryIndex = undefined
+    this.currentTrajectoryIndex = 0;
     this.intervalId=0;
   }
 
@@ -41,11 +41,16 @@ class Cannon {
     // }
     this.projectileTrajectory = [
       //aquí se definirá la trayectoria del tiro parabólico
-      {x: 50, y: 450},
-      {x: 100, y: 400},
-      {x: 200, y: 300},
-      {x: 300, y: 200},
-      {x: 400, y: 100}
+      {x: this.xPosition, y: this.yPosition},
+      {x: 100, y: this.yPosition},
+      {x: 150, y: this.yPosition - 50},
+      {x: 200, y: this.yPosition - 100},
+      {x: 250, y: this.yPosition - 200},
+      {x: 300, y: this.yPosition - 250},
+      {x: 350, y: this.yPosition - 200},
+      {x: 400, y: this.yPosition - 100},
+      {x: 450, y: this.yPosition - 50},
+      {x: 500, y: this.yPosition}
     ]
   }
 
@@ -61,14 +66,19 @@ class Cannon {
     return false
   }
 
-
-
 _shoot() {
-  this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 1000);
+  this.shotsLeft --
+  this.CurrentTrajectoryIndex = 0;
+  const messageBox = document.getElementById('shots');
+  messageBox.innerHTML = 'Shots left: ' + this.shotsLeft;
+  this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 200);
 }
 
 _nextProjectilePosition(){
-  this.currentTrajectoryIndex = this.currentTrajectoryIndex ++
+  this.currentTrajectoryIndex ++;
+  if (this.currentTrajectoryIndex === (this.projectileTrajectory.length - 1)) {
+    this._endShot()
+  }
 }
 
 _endShot() {
@@ -78,7 +88,8 @@ _endShot() {
   }
 }
 
-_moveProjectile() {
-    this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 1000);
-  }
+// _moveProjectile() {
+//     this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 1000);
+
+//   }
 }
