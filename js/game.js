@@ -1,8 +1,6 @@
 class Game {
   constructor(options, callback) {
     this.ctx = options.ctx;
-    this.intervalId = 0;
-    this.shootingTime = 5000; //time in ms
     this.playerCannon = options.playerCannon;
     this.targetCannon = options.targetCannon;
     this.cb = callback;
@@ -83,7 +81,6 @@ class Game {
     this._clean();
     this._drawPlayerCannon();
     this._drawTargetCannon();
-    //this.playerCannon._moveProjectile();
     this._drawPlayerProjectile();
     window.requestAnimationFrame(this._update.bind(this));
   }

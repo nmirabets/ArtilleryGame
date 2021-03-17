@@ -5,7 +5,7 @@ class Cannon {
     this.angle = 45;
     this.power = 100;
     this.shotsLeft = 3;
-    this.projectileTrajectory = undefined;
+    this.projectileTrajectory = [];
     this.currentTrajectoryIndex = 0;
     this.intervalId=0;
   }
@@ -13,13 +13,13 @@ class Cannon {
   angleUp() {
     const messageBox = document.getElementById('angle');
     this.angle ++
-    messageBox.innerHTML = 'Angle: ' + this.angle; //mover a main
+    messageBox.innerHTML = 'Angle: ' + this.angle + 'º'; //mover a main
   }
 
   angleDown() {
     const messageBox = document.getElementById('angle');
     this.angle --
-    messageBox.innerHTML = 'Angle: ' + this.angle;
+    messageBox.innerHTML = 'Angle: ' + this.angle + 'º';
   }
 
   powerUp() {
@@ -35,23 +35,19 @@ class Cannon {
   }
 
   _calculateTrajectory() {
+    let xCoordinate = 0;
+    let yCoordinate = 0;
+    const powerAdjuster = 20; //t his variable is used to adjust the power to the grid
+    const gravityAdjuster = 100;
+    const g = - 9.8 / gravityAdjuster;
+    for (let t = 0; t < 501; t++) {
+      // x = (Vo * cos(a)) * t
+      xCoordinate = this.xPosition + (this.power / powerAdjuster * Math.cos(this.angle / 180 * Math.PI) * t);
+      // y = (Vo * cos(a)) * t + 0,5 * g * t^2
+      yCoordinate = this.yPosition - (this.power / powerAdjuster * Math.sin(this.angle / 180 * Math.PI) * t + (0.5 * g * Math.pow(t,2)));
 
-    // for (let i = 0; i > 500; i++) {
-      
-    // }
-    this.projectileTrajectory = [
-      //aquí se definirá la trayectoria del tiro parabólico
-      {x: this.xPosition, y: this.yPosition},
-      {x: 100, y: this.yPosition},
-      {x: 150, y: this.yPosition - 50},
-      {x: 200, y: this.yPosition - 100},
-      {x: 250, y: this.yPosition - 200},
-      {x: 300, y: this.yPosition - 250},
-      {x: 350, y: this.yPosition - 200},
-      {x: 400, y: this.yPosition - 100},
-      {x: 450, y: this.yPosition - 50},
-      {x: 500, y: this.yPosition}
-    ]
+      this.projectileTrajectory.push({x: xCoordinate, y: yCoordinate});
+    }
   }
 
   _isTargetHit(targetCannon) {
@@ -68,10 +64,10 @@ class Cannon {
 
 _shoot() {
   this.shotsLeft --
-  this.CurrentTrajectoryIndex = 0;
+  this.currentTrajectoryIndex = 0;
   const messageBox = document.getElementById('shots');
   messageBox.innerHTML = 'Shots left: ' + this.shotsLeft;
-  this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 200);
+  this.intervalId = setInterval(this._nextProjectilePosition.bind(this), 25);
 }
 
 _nextProjectilePosition(){
