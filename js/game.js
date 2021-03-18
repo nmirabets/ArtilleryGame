@@ -28,33 +28,37 @@ class Game {
 
   _drawPlayerProjectile() {
     this.ctx.fillStyle = 'orange';
-    this.ctx.fillRect(
-      this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].x ,
-      this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].y ,
-      10,
-      10
-    )
+    if (this.playerCannon.currentTrajectoryIndex) {
+      this.ctx.fillRect(
+        this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].x ,
+        this.playerCannon.projectileTrajectory[this.playerCannon.currentTrajectoryIndex].y ,
+        10,
+        10
+      )
+    }
   }
 
   _assignControlsToKeys() {
   document.addEventListener('keydown', (event) => {
-    switch (event.keyCode) { //cambiar a .Code
-      case 38: //arrow up
+    switch (event.code) { //cambiar a .Code
+      case "ArrowUp": //arrow up to increase angle
         this.playerCannon.angleUp();
         break;
-      case 40: //arrow down
+      case "ArrowDown": //arrow down to decrease angle
         this.playerCannon.angleDown();
         break;
-      case 37: //arrow left
+      case "ArrowLeft": //arrow left to decrese power
         this.playerCannon.powerDown();
         break;
-      case 39: //arrow right
-        this.playerCannon.powerUp();
+      case "ArrowRight": //arrow right to increase power
+        this.playerCannon.powerUp(); 
         break;
-      case 32: //space bar
-        this.shoot();
+      case "KeyS": // s to shoot
+        if (this.playerCannon.shootingTakingPlace === false) {
+          this.shoot();
+        }
         break;
-      default: 
+      default:
         break;
     }
   });
@@ -69,19 +73,40 @@ class Game {
     this._assignControlsToKeys();
     this._drawPlayerCannon();
     this._drawTargetCannon();
-  }
-
-  shoot() {
-    this.playerCannon._calculateTrajectory();
-    this.playerCannon._shoot()
     window.requestAnimationFrame(this._update.bind(this));
   }
 
+  shoot() {
+    this.shootingTakingPlace = true;
+    this.playerCannon._calculateTrajectory();
+    this.playerCannon._shoot()
+    if (this.playerCannon._isTargetHit(this.targetCannon)) {
+      this.playerCannon.playerWins = true;
+    } else if (this.playerCannon.shotsLeft === 0) {
+      this.playerCannon.playerLoses = true;
+    }
+  }
+
   _update() {
+    // draw elements
     this._clean();
     this._drawPlayerCannon();
     this._drawTargetCannon();
     this._drawPlayerProjectile();
+    // update labels
+    const messageBox = document.getElementById('shots');
+    messageBox.innerHTML = 'Shots left: ' + this.playerCannon.shotsLeft;
+    // check if player has lost
+    if (this.playerCannon.playerLoses === true && this.playerCannon.shootingTakingPlace === false) {
+      this.cb();
+      return;
+    }
+    // check if player has won
+    if (this.playerCannon.playerWins === true && this.playerCannon.shootingTakingPlace === false) {
+      this.cb();
+      return;
+    }
+    // next frame
     window.requestAnimationFrame(this._update.bind(this));
   }
 
