@@ -38,7 +38,6 @@ class Cannon {
   }
 
   _calculateTrajectory() {
-    console.log("Calculate Trajectory!");
     this.projectileTrajectory = [];
     let xCoordinate = 0;
     let yCoordinate = 0;
@@ -59,14 +58,14 @@ class Cannon {
   }
 
   _isTargetHit(targetCannon) {
-    this.projectileTrajectory.forEach( function (item) {
-      //check if projectile intersects target position +/- 10 on each axis
-      if (item.x > (targetCannon.xPosition - 10) && item.x < (targetCannon.xPosition + 10) && 
-      item.y > (targetCannon.yPosition - 10) && item.y < (targetCannon.yPosition + 10)) {
-        playerWins = true;
+    for (let i = 0; i < this.projectileTrajectory.length -1; i++) {
+      if (this.projectileTrajectory[i].x > (targetCannon.xPosition - 10) && 
+      this.projectileTrajectory[i].x < (targetCannon.xPosition + 10) && 
+      this.projectileTrajectory[i].y > (targetCannon.yPosition - 10) && 
+      this.projectileTrajectory[i].y < (targetCannon.yPosition + 10)) {
+          return true;
       }
     }
-    )
   }
 
 _shoot() {

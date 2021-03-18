@@ -113,21 +113,4 @@ class Game {
   _generateRandomTargetPosition(targetCannon) {
     this.targetCannon = new Cannon(Math.floor(Math.random() * 1), Math.floor(Math.random() * 1));
   }
-
-    // _update() {
-  //   this._clean();
-  //   this._drawPlayerCannon();
-  //   this._drawTargetCannon();
-  //   this._drawPlayerProjectile();
-  //   if (this.playerCannon.CurrentTrajectoryIndex > this.playerCannon.projectileTrajectory.length){
-  //     //shooting finished
-  //     if (this.playerCannon._isTargetHit(this.targetCannon)) {
-  //       // player wins
-  //     } else if (this.playerCannon.bulletsLeft === 0) {
-  //       // player loses
-  //     }
-  //     this.playerCannon._endShot()
-  //   }
-  // }
-
 }
