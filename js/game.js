@@ -3,10 +3,73 @@ class Game {
     this.ctx = options.ctx;
     this.playerCannon = options.playerCannon;
     this.targetCannon = options.targetCannon;
+    this.levelFunctions = [
+      [80, 0.25],
+      [0, 1.25, -0.00125],
+      [-25,2.75,-0.0054,0.000002678]
+    ]
+    this.mapCoordinates = [];
+    this.currentLevel = 2;
     this.cb = callback;
+    this.status = "intro"; // intro, win, lose
+  }
+
+  _drawMap() {
+    this.ctx.fillStyle = 'brown';
+    for (let j=0; j< this.mapCoordinates.length -1;j++) {
+      this.ctx.fillRect(
+        this.mapCoordinates[j].x,
+        this.mapCoordinates[j].y,
+        2,
+        2
+      );
+    }
+  }
+
+  _calculateMapCoordinates() {
+
+  let xMap = 0;
+  let yMap = 0;
+  this.mapCoordinates = [];
+
+  for (let i = 0; i < 1000; i++) {
+        xMap = i;
+        yMap = this._levelFunction(xMap)
+
+        this.mapCoordinates.push({x: xMap, y: yMap})
+  }
+  }
+
+  _levelFunction(xCoordinate) {
+
+    let calcY = 0;
+
+    switch (this.currentLevel) {
+      case 1:
+        calcY = this.levelFunctions[0][0] + this.levelFunctions[0][1] * xCoordinate
+        return calcY
+      break;
+      case 2:
+        calcY = this.levelFunctions[1][0] + this.levelFunctions[1][1] * xCoordinate + this.levelFunctions[1][2] * Math.pow(xCoordinate, 2)
+        return calcY
+      break;
+      case 3:
+        calcY = 500 - (this.levelFunctions[1][0] + this.levelFunctions[1][1] * xCoordinate + this.levelFunctions[1][2] * Math.pow(xCoordinate, 2) + this.levelFunctions[2][3] * Math.pow(xCoordinate, 3))
+        return calcY
+      break;
+    }
+
+    // let calcY = 0;
+
+    // for (let i = 0; i < this.levelFunctions[0].length -1; i++) {
+    //   calcY += this.levelFunctions[this.currentLevel][i] * Math.pow(xCoordinate,this.currentLevel)
+    // }
+
+    // return calcY;
   }
 
   _drawPlayerCannon() {
+    //let img = createImageBitmap("img/Cannon.png")
     this.ctx.fillStyle = 'black';
     this.ctx.fillRect(
       this.playerCannon.xPosition,
@@ -17,13 +80,17 @@ class Game {
   }
 
   _drawTargetCannon() {
-    this.ctx.fillStyle = 'Red';
-    this.ctx.fillRect(
-      this.targetCannon.xPosition,
-      this.targetCannon.yPosition,
-      10,
-      10
-    );
+    //this.ctx.fillStyle = 'Red';
+     let img = new Image
+     img.src = "/img/Cannon.png"
+    this.ctx.drawImage(img, this.targetCannon.xPosition, this.targetCannon.yPosition,50,50);
+
+    // this.ctx.fillRect(
+    //   this.targetCannon.xPosition,
+    //   this.targetCannon.yPosition,
+    //   10,
+    //   10
+    // );
   }
 
   _drawPlayerProjectile() {
@@ -37,6 +104,21 @@ class Game {
       )
     }
   }
+
+  _drawProjectilePath() {
+    this.ctx.fillStyle = 'gray';
+    if (this.playerCannon.currentTrajectoryIndex) {
+      for (let i = 0; i < this.playerCannon.currentTrajectoryIndex; i++) {
+        this.ctx.fillRect(
+          this.playerCannon.projectileTrajectory[i].x + 5,
+          this.playerCannon.projectileTrajectory[i].y + 5,
+          1,
+          1
+        )
+      }
+    }
+  }
+
 
   _assignControlsToKeys() {
   document.addEventListener('keydown', (event) => {
@@ -65,14 +147,17 @@ class Game {
 }
 
   _clean() {
-    this.ctx.clearRect(0, 0, 500, 500);
+    this.ctx.clearRect(0, 0, 1000, 500);
   }
 
   start() {
     this._clean();
     this._assignControlsToKeys();
+    this._generateRandomCannonPositions(this.playerCannon,this.targetCannon)
     this._drawPlayerCannon();
     this._drawTargetCannon();
+    this._calculateMapCoordinates();
+    this._drawMap();
     window.requestAnimationFrame(this._update.bind(this));
   }
 
@@ -93,6 +178,8 @@ class Game {
     this._drawPlayerCannon();
     this._drawTargetCannon();
     this._drawPlayerProjectile();
+    this._drawProjectilePath();
+    this._drawMap();
     // update labels
     const messageBox = document.getElementById('shots');
     messageBox.innerHTML = 'Shots left: ' + this.playerCannon.shotsLeft;
@@ -110,7 +197,11 @@ class Game {
     window.requestAnimationFrame(this._update.bind(this));
   }
 
-  _generateRandomTargetPosition(targetCannon) {
-    this.targetCannon = new Cannon(Math.floor(Math.random() * 1), Math.floor(Math.random() * 1));
+  _generateRandomCannonPositions(playerCannon,targetCannon) {
+    this.playerCannon.xPosition = Math.floor(Math.random() * 500);
+    this.targetCannon.xPosition = 500 + Math.floor(Math.random() * 500);
+
+    this.playerCannon.yPosition = this._levelFunction(this.playerCannon.xPosition) - 5;
+    this.targetCannon.yPosition = this._levelFunction(this.targetCannon.xPosition) - 5;
   }
 }

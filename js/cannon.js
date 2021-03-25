@@ -4,7 +4,7 @@ class Cannon {
     this.yPosition = yInitialPosition;
     this.angle = 45;
     this.power = 100;
-    this.shotsLeft = 3;
+    this.shotsLeft = 5;
     this.projectileTrajectory = [];
     this.currentTrajectoryIndex = 0;
     this.intervalId=0;
@@ -54,7 +54,7 @@ class Cannon {
       this.projectileTrajectory.push({x: xCoordinate, y: yCoordinate});
       t ++
     }
-    while (xCoordinate <= 500 && yCoordinate <= 500);
+    while (xCoordinate <= 1000 && yCoordinate <= 500);
   }
 
   _isTargetHit(targetCannon) {
