@@ -80,17 +80,17 @@ class Game {
   }
 
   _drawTargetCannon() {
-    //this.ctx.fillStyle = 'Red';
-     let img = new Image
-     img.src = "/img/Cannon.png"
-    this.ctx.drawImage(img, this.targetCannon.xPosition, this.targetCannon.yPosition,50,50);
 
-    // this.ctx.fillRect(
-    //   this.targetCannon.xPosition,
-    //   this.targetCannon.yPosition,
-    //   10,
-    //   10
-    // );
+    //  let img = new Image
+    //  img.src = "/img/Cannon.png"
+    // this.ctx.drawImage(img, this.targetCannon.xPosition, this.targetCannon.yPosition,50,50);
+    this.ctx.fillStyle = 'Red';
+    this.ctx.fillRect(
+      this.targetCannon.xPosition,
+      this.targetCannon.yPosition,
+      10,
+      10
+    );
   }
 
   _drawPlayerProjectile() {
