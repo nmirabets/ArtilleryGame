@@ -19,10 +19,9 @@ title {
 }
 
 #msg-screen {
-  background-image: url('../img/intro.png');
   margin: 0 auto;
-  width: 980px;
-  height: 579px;
+  width: 1000px;
+  height: 500px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -42,12 +41,13 @@ title {
   display: none;
   justify-content: center;
   align-items:flex-end;
+  width: 1000px;
+  margin: 0 auto;
 }
 
 #canvas {
   background-color: white;
   color: white;
-  padding: 15px 30px;
   border: 1px solid black;
   text-transform: uppercase;
   font-size: 25px;
@@ -55,55 +55,31 @@ title {
 }
 
 #game-data {
-  background-color: whitesmoke;
+  background-color: black;
   font-size: 20px;
-  padding: 0.5 rem;
-  width: 500px;
+  padding: 5px;
+  width: 200px;
   justify-content: center;
   margin: 0 auto;
-  color: black;
+  color: white;
+  border: 1px solid white;
 }
 
 .win {
   background-image: url('../img/you win.png');
+  display: flex;
 }
 
 .lose {
   background-image: url('../img/you lose.png');
+  display: flex;
 }
 
-/* crear .win .lose .intro y meter cada imagen como background de esa clase
-
-.container {
-  margin: 0 auto;
-  width: 1000px;
-}
-
-canvas#artillery {
-  margin: 0 auto;
-  border: 1px solid black;
-}
-
-
-
-.mb-2 {
-  margin-bottom: 2rem;
-}
-
-.show {
-  display: block;
+.intro {
+  background-image: url('../img/intro2.png');
+  display: flex;
 }
 
 .hide {
   display: none;
 }
-
- /*.splash {
-  width: 980px;
-  height: 579px;
-  background-color: whitesmoke;
-  background-image: url('../img/snake-intro.gif');
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-};*/

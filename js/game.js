@@ -185,12 +185,12 @@ class Game {
     messageBox.innerHTML = 'Shots left: ' + this.playerCannon.shotsLeft;
     // check if player has lost
     if (this.playerCannon.playerLoses === true && this.playerCannon.shootingTakingPlace === false) {
-      this.cb();
+      this.cb(false);
       return;
     }
     // check if player has won
     if (this.playerCannon.playerWins === true && this.playerCannon.shootingTakingPlace === false) {
-      this.cb();
+      this.cb(true);
       return;
     }
     // next frame
